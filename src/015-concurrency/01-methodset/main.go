@@ -2,29 +2,32 @@ package main
 
 import (
 	"fmt"
-	"math"
+	"runtime"
+	"sync"
 )
 
-type circle struct {
-	radius float64
-}
-
-type shape interface {
-	area() float64
-}
-
-func (c *circle) area() float64 {
-	return math.Pi * c.radius * c.radius
-}
-
-func info(s shape) {
-	fmt.Println("area", s.area())
-}
-
 func main() {
-	c := circle{5}
-	// info(c)
-	//info(&c)
-	info(&c)
-	// fmt.Println(c.area())
+	fmt.Println("CPUs:", runtime.NumCPU())
+	fmt.Println("Goroutines:", runtime.NumGoroutine())
+
+	counter := 0
+
+	const gs = 100
+	var wg sync.WaitGroup
+	wg.Add(gs)
+
+	for i := 0; i < gs; i++ {
+		go func() {
+			v := counter
+			// time.Sleep(time.Second)
+			runtime.Gosched()
+			v++
+			counter = v
+			wg.Done()
+		}()
+		fmt.Println("Goroutines:", runtime.NumGoroutine())
+	}
+	wg.Wait()
+	fmt.Println("Goroutines:", runtime.NumGoroutine())
+	fmt.Println("count:", counter)
 }
