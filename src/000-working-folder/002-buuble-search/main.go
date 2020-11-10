@@ -29,7 +29,7 @@ func main() {
 	}
 
 	//temporal variable to store int
-	tempValue := 0
+	//tempValue := 0
 	l := len(x)
 
 	//compare the first letter in the array with the next and if is higher swapped it and make "found" = true.
@@ -38,7 +38,7 @@ func main() {
 		found = false
 		for i := 0; i < l-1; i++ {
 			if x[i] > x[i+1] {
-				tempValue = x[i]
+				tempValue := x[i]
 				x[i] = x[i+1]
 				x[i+1] = tempValue
 				found = true
